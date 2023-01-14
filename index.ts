@@ -1,5 +1,14 @@
-import app from "./src/app";
+import "dotenv/config"
 
-app.listen(3000, () => {
-    console.log('Listening port 3000')
+import app from "./src/app";
+import connectionDb from './src/config/config';
+
+connectionDb.then(() => {
+    console.log('Connected to database')
+    app.listen(process.env.PORT as string | 3002, () => {
+        console.log('Listening port ' + process.env.PORT)
+    })
+}).catch((er: any) => {
+    console.log(er)
 })
+

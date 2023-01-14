@@ -1,5 +1,7 @@
-import {Schema, Types, model} from "mongoose";
+import {Model, Schema, model} from "mongoose";
 import { MyData } from "../interfaces/mydata.interface";
+
+interface MyDataModel extends Model<MyData> {}
 
 const MyDataSchema = new Schema<MyData>(
     {
@@ -17,11 +19,24 @@ const MyDataSchema = new Schema<MyData>(
         description: {
             type: String,
             minLength: 60
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        phone: {
+            type: String,
+            required: true
+        },
+        theme: {
+            type: String,
+            required: true,
+            enum: ['light', 'dark']
         }
     }, {
         versionKey: false
     }
 )
 
-const DataModel = model('MyData', MyDataSchema);
+const DataModel: MyDataModel = model('MyData', MyDataSchema);
 export default DataModel;
