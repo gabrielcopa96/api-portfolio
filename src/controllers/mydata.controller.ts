@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { createData, getMyData, updateOneData } from "../services/mydata.service";
 import { createSocialNetwork } from "../services/socialnetwork.service";
 
+
 const getData = async (req: Request, res: Response) => {
     
     try {
