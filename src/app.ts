@@ -10,6 +10,7 @@ const versionApi = process.env.VERSION || "v1";
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 app.use(morgan("dev"));
 
 mongoose.set("strictQuery", false);

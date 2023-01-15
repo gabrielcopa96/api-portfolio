@@ -1,5 +1,6 @@
-import {Model, Schema, model} from "mongoose";
+import {Model, Types, Schema, model} from "mongoose";
 import { MyData } from "../interfaces/mydata.interface";
+import { SocialNetwork } from '../interfaces/socialnetwork.interface';
 
 interface MyDataModel extends Model<MyData> {}
 
@@ -27,6 +28,10 @@ const MyDataSchema = new Schema<MyData>(
         phone: {
             type: String,
             required: true
+        },
+        socialnetwork: {
+            type: [Types.ObjectId],
+            ref: 'Socialnetworks'
         },
         theme: {
             type: String,
