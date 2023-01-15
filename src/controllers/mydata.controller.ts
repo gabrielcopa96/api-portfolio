@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 import { createData, getMyData, updateOneData } from "../services/mydata.service";
 import { createSocialNetwork } from "../services/socialnetwork.service";
+import { MyDataOutput, ServiceOutputFailure, ServiceOutputSuccess, UpdateDataSuccess } from "../interfaces/mydata.interface";
+import { SocialNetwork } from '../interfaces/socialnetwork.interface';
 
 const getData = async (req: Request, res: Response) => {
     
     try {
 
-        const data: any = await getMyData();
+        const data: ServiceOutputSuccess | ServiceOutputFailure = await getMyData();
 
         if(data.status !== 200) {
             return res.status(data.status).json({
@@ -47,21 +49,14 @@ const postData = async ({ body }: Request, res: Response) => {
         delete body.socialnetworks;
 
         // creo el documento de mi data
-        const data: any = await createData({
+        const { status, data }: ServiceOutputSuccess = await createData({
             ...body,
             socialnetwork: social.map((social: any) => social._id)
         });
 
-        // si el status de la respuesta no es 200, retorno el error
-        if(data.status !== 200) {
-            return res.status(data.status).json({
-                message: data.message
-            })
-        }
-
         // si el status de la respuesta es 200, retorno la data
-        return res.status(data.status).json({
-            data: data.data
+        return res.status(status).json({
+            data: data
         })
 
     } catch (e: any) {
@@ -80,16 +75,10 @@ const updateData = async ({ params, body }: Request, res: Response) => {
 
         const { id } = params
 
-        const data: any = await updateOneData(id, body);
+        const { status, message }: UpdateDataSuccess = await updateOneData(id, body);
 
-        if(data.status !== 200) {
-            return res.status(data.status).json({
-                message: data.message
-            })
-        }
-
-        return res.status(data.status).json({
-            data: data.data
+        return res.status(status).json({
+            message: message
         })
 
     } catch (e: any) {

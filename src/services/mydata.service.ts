@@ -1,11 +1,12 @@
+import { MyDataFindOutput, MyDataOutput, ServiceOutputFailure, ServiceOutputSuccess, UpdateDataSuccess } from "../interfaces/mydata.interface";
 import DataModel from "../models/mydata.schema";
 
-const getMyData = async () => {
+const getMyData = async (): Promise<ServiceOutputSuccess | ServiceOutputFailure> => {
 
    try {
 
       // busco el documento de mi data
-      const data = await DataModel.findOne({
+      const data: MyDataFindOutput | null = await DataModel.findOne({
          last_name: "Copa"
       })
          .populate("socialnetwork", "name url image");
@@ -34,12 +35,12 @@ const getMyData = async () => {
 
 };
 
-const createData = async (data: any) => {
+const createData = async (data: any): Promise<ServiceOutputSuccess> => {
 
    try {
 
       // creo el documento de mi data
-      const myData = await DataModel.create(data);
+      const myData: MyDataOutput = await DataModel.create(data);
 
       // retorno el documento junto con el status
       return {
@@ -55,21 +56,18 @@ const createData = async (data: any) => {
    }
 }
 
-const updateOneData = async (id: string, data: any) => {
+const updateOneData = async (id: string, data: any): Promise<UpdateDataSuccess> => {
 
    try {
 
-      const updateData = await DataModel.updateOne(
+      await DataModel.updateOne(
          { _id: id },
-         data,
-         {
-            new: true
-         }
+         data
       )
 
       return {
          status: 200,
-         data: updateData
+         message: "Data updated successfully"
       }
 
    } catch (error: any) {
